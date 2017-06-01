@@ -35,7 +35,6 @@ router.post('/', (req, res, next) => {
 
 router.get('/:id', (req, res, next) => {
   res.send(req.user)
-  .catch(logErr);
 })
 
 router.put('/:id', (req, res, next) => {

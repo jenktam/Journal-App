@@ -13,17 +13,20 @@ app.use(volleyball);
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
-
-// app.get('*', (req, res) => {
-//   res.sendFile(path.join(__dirname, '../browser/index.html'))
-// })
 // routes
 app.use('/', require('./routes'))
-// app.get('/', (req, res, next) => {
-//   res.send("home page")
-// })
 
-// app.use('/api', require('./routes/index'))
+// error handling middleware
+app.use((err, req, res, next) => {
+  err.status = err.status || 500;
+  console.log(err);
+  res.send(`An error occurred: ${err.status}`);
+});
+
+// serves react page on localhost:3000
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../browser/index.html'))
+})
 
 // set up server
 db.sync()
