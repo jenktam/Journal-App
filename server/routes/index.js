@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const models = require('../../db/index')
+const models = require('../../db/models/index')
 
 router.use('/users', require('./users'))
 router.use('/journalEntries', require('./journalEntries'))
