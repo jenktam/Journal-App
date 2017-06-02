@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import store, { postJournalEntry } from './redux';
+import store, { postJournalEntry } from '../redux';
 
 class JournalForm extends Component {
   constructor(props) {
@@ -56,7 +56,9 @@ class JournalForm extends Component {
       <div>
         <h1>New Journal Entry</h1>
         <form onSubmit={this.handleSubmit}>
-          <select name="users" placeholder="Users" onChange={this.handleUser}> {
+          <select name="users" placeholder="Users" onChange={this.handleUser}>
+            <option>Choose User</option>
+          {
             this.props.users.map( user => {
               return (
                 <option key={user.id} value={user.id} >{user.name}

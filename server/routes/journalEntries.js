@@ -32,6 +32,7 @@ router.get('/', (req, res, next) => {
 })
 
 router.post('/', (req, res, next) => {
+  // can't add eager loading into create. therefore need to add eager loading into promise chain
   JournalEntry.create(req.body)
 
     //adds userId in new entry. This is important or Sequelize won't create the association and add a userId to a journalEntry in a post request

@@ -1,7 +1,7 @@
 import React,{ Component } from 'react';
 // import store from '../re'
 import axios from 'axios'
-import store, { addUser } from './redux'
+import store, { addUser } from '../redux'
 
 class UserForm extends Component{
   constructor(props) {
