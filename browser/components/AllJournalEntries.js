@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 const AllJournalEntries = props => {
-  console.log("props.journalEntries", props.journalEntries);
+
   return (
   <div>
     <h1>All Journal Entries</h1>

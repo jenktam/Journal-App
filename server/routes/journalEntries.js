@@ -26,7 +26,7 @@ const logErr = console.error.bind(console);
 router.get('/', (req, res, next) => {
   JournalEntry.findAll()
   .then(res.send.bind(res))
-  .catch(logErr)
+  .catch(next)
 })
 
 router.post('/', (req, res, next) => {
@@ -42,7 +42,7 @@ router.post('/', (req, res, next) => {
 
   // Then adds newEntry data to DB.
   .then( newEntry => res.send(newEntry))
-  .catch(logErr)
+  .catch(next)
 })
 
 router.get('/:id', (req, res, next) => {
@@ -54,11 +54,11 @@ router.put('/:id', (req, res, next) => {
   .then( updatedJournalEntry => {
     res.status(200).send(updatedJournalEntry)
   })
-  .catch(logErr)
+  .catch(next)
 })
 
 router.delete('/:id', (req, res, next) => {
   req.journalEntry.destroy()
   .then(() => res.status(204).end())
-  .catch(logErr)
+  .catch(next)
 })

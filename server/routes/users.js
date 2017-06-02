@@ -24,13 +24,13 @@ router.param('id', (req, res, next, id) => {
 router.get('/', (req, res, next) => {
   User.findAll()
   .then(res.send.bind(res))
-  .catch(logErr)
+  .catch(next)
 })
 
 router.post('/', (req, res, next) => {
   User.create(req.body)
   .then(createdUser => res.send(createdUser))
-  .catch(logErr)
+  .catch(next)
 })
 
 router.get('/:id', (req, res, next) => {
@@ -48,5 +48,5 @@ router.put('/:id', (req, res, next) => {
 router.delete('/:id', (req, res, next) => {
   req.user.destroy()
   .then(() => res.status(204).end())
-  .catch(logErr)
+  .catch(next)
 })

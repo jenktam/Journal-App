@@ -38,7 +38,9 @@ class JournalForm extends Component {
 
   handleSubmit(e) {
     e.preventDefault();
-    store.dispatch(postJournalEntry(this.state)) //used redux thunk action-creator
+    store.dispatch(postJournalEntry(this.state))
+    console.log("handleSubmit in JournalForm", this.state);
+    //used redux thunk action-creator
     // axios.post('/api/journalEntries')
     // .then( res => res.data)
     // .then( (newJournalEntry) => {
@@ -50,22 +52,21 @@ class JournalForm extends Component {
   }
 
   render() {
-
     return(
       <div>
         <h1>New Journal Entry</h1>
         <form onSubmit={this.handleSubmit}>
-          <select name="users" placeholder="Users"> {
+          <select name="users" placeholder="Users" onChange={this.handleUser}> {
             this.props.users.map( user => {
               return (
-                <option key={user.id} value={user} onChange={this.handleUser} >{user.name}
+                <option key={user.id} value={user.id} >{user.name}
                 </option>
               )
             })
           }
           </select>
           <input name="title" placeholder="Title" onChange={this.handleTitle} />
-          <input name="content" placeholder="Content" onChange={this.handleContent} />
+          <textarea name="content" placeholder="Content" onChange={this.handleContent} />
           <button>Submit</button>
         </form>
       </div>
