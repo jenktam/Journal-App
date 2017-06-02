@@ -5092,7 +5092,7 @@ module.exports = defaults;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.postJournalEntry = exports.addJournalEntry = exports.loadJournalEntries = exports.addUser = exports.loadUsers = exports.ADD_JOURNAL_ENTRY = exports.LOAD_JOURNAL_ENTRIES = exports.ADD_USER = exports.LOAD_USERS = undefined;
+exports.postJournalEntry = exports.fetchJournalEntries = exports.fetchUsers = exports.addJournalEntry = exports.loadJournalEntries = exports.addUser = exports.loadUsers = exports.ADD_JOURNAL_ENTRY = exports.LOAD_JOURNAL_ENTRIES = exports.ADD_USER = exports.LOAD_USERS = undefined;
 
 var _redux = __webpack_require__(236);
 
@@ -5147,6 +5147,27 @@ var addJournalEntry = exports.addJournalEntry = function addJournalEntry(journal
 };
 
 // thunks
+// do async work and then perform async actions for us
+var fetchUsers = exports.fetchUsers = function fetchUsers() {
+  return function (dispatch) {
+    _axios2.default.get('/api/users').then(function (res) {
+      return res.data;
+    }).then(function (users) {
+      return dispatch(loadUsers(users));
+    }).catch(console.error.bind(console));
+  };
+};
+
+var fetchJournalEntries = exports.fetchJournalEntries = function fetchJournalEntries() {
+  return function (dispatch) {
+    _axios2.default.get('/api/journalEntries').then(function (res) {
+      return res.data;
+    }).then(function (journalEntries) {
+      return dispatch(loadJournalEntries(journalEntries));
+    }).catch(console.error.bind(console));
+  };
+};
+
 var postJournalEntry = exports.postJournalEntry = function postJournalEntry(entryInfo) {
   return function (dispatch) {
     _axios2.default.post('api/journalEntries', entryInfo).then(function (res) {
@@ -10774,8 +10795,6 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
-
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _react = __webpack_require__(18);
@@ -10840,25 +10859,9 @@ var Main = function (_Component) {
         return _this2.setState(_redux2.default.getState());
       } //since store not passed in cannot put this.state.
 
-      );Promise.all([_axios2.default.get('/api/users'), _axios2.default.get('/api/journalEntries')]).then(function (responses) {
-        return responses.map(function (res) {
-          return res.data;
-        });
-      }).then(function (_ref) {
-        var _ref2 = _slicedToArray(_ref, 2),
-            users = _ref2[0],
-            journalEntries = _ref2[1];
-
-        _redux2.default.dispatch((0, _redux.loadUsers)(users));
-        _redux2.default.dispatch((0, _redux.loadJournalEntries)(journalEntries));
-      }).catch(console.error.bind(console));
+      );_redux2.default.dispatch((0, _redux.fetchUsers)());
+      _redux2.default.dispatch((0, _redux.fetchJournalEntries)());
     }
-    //   axios.get('/api/users')
-    //   .then(res => res.data)
-    //   .then( users => store.dispatch(loadUsers(users))) //store.dispatch takes action object and calls reducer function with loadUsers value. new state updated and sent to redux store
-    //   .catch(err => console.error(err))
-    // }
-
   }, {
     key: 'componentWillUnmount',
     value: function componentWillUnmount() {
@@ -11752,24 +11755,38 @@ var _react2 = _interopRequireDefault(_react);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var AllJournalEntries = function AllJournalEntries(props) {
-
+  console.log("props in AllJournalEntries", props.journalEntries);
   return _react2.default.createElement(
-    'div',
+    "div",
     null,
     _react2.default.createElement(
-      'h1',
+      "h1",
       null,
-      'All Journal Entries'
+      "All Journal Entries"
     ),
     _react2.default.createElement(
-      'ul',
+      "ul",
       null,
       props.journalEntries.map(function (journalEntry) {
         return _react2.default.createElement(
-          'li',
+          "li",
           { key: journalEntry.id },
+          _react2.default.createElement(
+            "strong",
+            null,
+            "Title:"
+          ),
+          " ",
           journalEntry.title,
-          ' '
+          " ",
+          _react2.default.createElement(
+            "strong",
+            null,
+            "By:"
+          ),
+          " ",
+          journalEntry.user.name,
+          " "
         );
       })
     )

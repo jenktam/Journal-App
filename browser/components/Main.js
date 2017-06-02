@@ -4,7 +4,7 @@ import UserForm from './UserForm'
 import JournalForm from './JournalForm'
 import AllUsers from './AllUsers'
 import AllJournalEntries from './AllJournalEntries'
-import store, { loadUsers, loadJournalEntries } from './redux'
+import store, { fetchUsers, fetchJournalEntries } from './redux'
 
 class Main extends Component {
   constructor() {
@@ -21,22 +21,9 @@ class Main extends Component {
 
     this.unsubscribe = store.subscribe( () => this.setState(store.getState())) //since store not passed in cannot put this.state.
 
-    Promise.all([
-      axios.get('/api/users'),
-      axios.get('/api/journalEntries')
-    ])
-    .then( responses => responses.map( res => res.data))
-    .then(([users, journalEntries]) => {
-      store.dispatch(loadUsers(users));
-      store.dispatch(loadJournalEntries(journalEntries))
-    })
-    .catch(console.error.bind(console));
+    store.dispatch(fetchUsers());
+    store.dispatch(fetchJournalEntries())
   }
-  //   axios.get('/api/users')
-  //   .then(res => res.data)
-  //   .then( users => store.dispatch(loadUsers(users))) //store.dispatch takes action object and calls reducer function with loadUsers value. new state updated and sent to redux store
-  //   .catch(err => console.error(err))
-  // }
 
   componentWillUnmount(){
     this.unsubscribe()

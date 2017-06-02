@@ -24,8 +24,10 @@ router.param('id', (req, res, next, id) => {
 const logErr = console.error.bind(console);
 
 router.get('/', (req, res, next) => {
-  JournalEntry.findAll()
-  .then(res.send.bind(res))
+  JournalEntry.findAll({
+    include: [User] //must apply eager loading to associatiate userId in JournalEntry table to id in User table
+  })
+  .then(allEntries => res.send(allEntries))
   .catch(next)
 })
 

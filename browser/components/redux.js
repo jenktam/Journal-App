@@ -32,6 +32,21 @@ export const addJournalEntry = journalEntry => ({
 })
 
 // thunks
+// do async work and then perform async actions for us
+export const fetchUsers = () => dispatch => {
+  axios.get('/api/users')
+  .then( res => res.data)
+  .then(users => dispatch(loadUsers(users)))
+  .catch(console.error.bind(console));
+}
+
+export const fetchJournalEntries = () => dispatch => {
+  axios.get('/api/journalEntries')
+  .then( res => res.data)
+  .then( journalEntries => dispatch(loadJournalEntries(journalEntries)))
+  .catch(console.error.bind(console))
+}
+
 export const postJournalEntry = entryInfo => dispatch => {
   axios.post('api/journalEntries', entryInfo)
   .then(res => res.data)
