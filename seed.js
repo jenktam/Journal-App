@@ -10,7 +10,7 @@ const JournalEntry = require('./db/models/journalEntry')
 db.sync({force: true})
 .then( () => {
   return User.bulkCreate([
-    { name: 'Jen Tam', email: 'Jen@Jen.com' },
+    { name: 'Jen Maker', email: 'Jen@Jen.com' },
     { name: 'Beyonce Knowles', email: 'Beyonce@Beyonce.com'  },
     { name: 'Sandy Loo', email: 'Sandy@Sandy.com' },
     { name: 'Wendy Lane', email: 'Wendy@Wendy.com'  },

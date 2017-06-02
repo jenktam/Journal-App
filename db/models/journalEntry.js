@@ -11,7 +11,7 @@ const JournalEntry = db.define("journalEntry", {
 },
 {
   hooks: {
-    beforeCreate: entry => entry.title = entry.title.toUpperCase()
+    beforeCreate: journalEntry => journalEntry.title = journalEntry.title.toUpperCase()
     }
 })
 

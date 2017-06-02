@@ -5,7 +5,9 @@ const User = require('../../db/models/user');
 const JournalEntry = require('../../db/models/journalEntry');
 
 router.param('id', (req, res, next, id) => {
-  JournalEntry.findById(id)
+  JournalEntry.findById(id, {
+    include: [ User ]
+  })
   .then( journalEntry => {
     if(!journalEntry) {
       const err = Error('Journal entry doesn\'t exist!')
@@ -29,7 +31,17 @@ router.get('/', (req, res, next) => {
 
 router.post('/', (req, res, next) => {
   JournalEntry.create(req.body)
-  .then( res.send.bind(res))
+
+    //adds userId in new entry. This is important or Sequelize won't create the association and add a userId to a journalEntry in a post request
+  .then(newEntry => newEntry.setUser(+req.body.user))
+
+  // searches journalEntry table for id that matching newEntry's id and userId.
+  .then(newEntry => JournalEntry.findById(newEntry.id, {
+    include: [ User ]
+  }))
+
+  // Then adds newEntry data to DB.
+  .then( newEntry => res.send(newEntry))
   .catch(logErr)
 })
 

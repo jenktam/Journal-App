@@ -1,12 +1,8 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import UserForm from './components/UserForm'
-import AllUsers from './components/AllUsers'
+import Main from './components/Main';
 
 ReactDOM.render(
-  <div>
-    <UserForm />
-    <AllUsers />
-  </div>,
+  <Main />,
   document.getElementById('app')
 )

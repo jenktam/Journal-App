@@ -1,6 +1,7 @@
 import React,{ Component } from 'react';
 // import store from '../re'
 import axios from 'axios'
+import store, { addUser } from './redux'
 
 class UserForm extends Component{
   constructor(props) {
@@ -33,7 +34,7 @@ class UserForm extends Component{
     axios.post('/api/users', this.state)
     .then(res => res.data)
     .then(newUser => {
-      // store.dispatch(addUser(newUser))
+      store.dispatch(addUser(newUser))
       console.log("new user dispatched:", newUser)
     })
     .catch(err => console.error(err))
